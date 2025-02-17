@@ -3,27 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fetch API Methods</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        #data-container {
-            margin-top: 20px;
-        }
-        .item {
-            margin-bottom: 10px;
-        }
-        img {
-            max-width: 300px;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-        }
-    </style>
+    <title>Fetch GET, POST, PUT, DELETE</title>
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <h1>Fetch GET, POST DELETE</h1>
-    <button id="fetch-button">Initial Fetch</button>
+    <h1>Fetch GET, POST, DELETE</h1>
+    <form id="form">
+        <label for="input-img">Image:</label>
+        <input type="text" id="input-img" name="image">
+        
+        <label for="input-title">Title:</label>
+        <input type="text" id="input-title" name="title">
+        
+        <label for="input-bio">Bio:</label>
+        <input type="text" id="input-bio" name="bio">
+
+        <button id="fetch-create">Create post</button>
+        <button id="fetch-list">Lists of post</button>
+    </form>
     <div id="data-container"></div>
 
     <script src="index.js"></script>

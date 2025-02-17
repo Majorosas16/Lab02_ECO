@@ -58,6 +58,12 @@
       "title": "Exploring the Mountains",
       "body": "A journey through the rugged peaks and serene valleys.",
       "imageUrl": "https://picsum.photos/250/250?random=1"
+    },
+    {
+      "id": "cc5f",
+      "image": "grefre",
+      "title": "grefgre",
+      "bio": "gregre"
     }
   ]
 }
