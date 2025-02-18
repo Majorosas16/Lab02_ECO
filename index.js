@@ -13,8 +13,8 @@ const title = document.getElementById('input-title').value;
 const bio = document.getElementById('input-bio').value;
 
   console.log(img);
-console.log(title);
-console.log(bio);
+  console.log(title);
+  console.log(bio);
 }
 
 
