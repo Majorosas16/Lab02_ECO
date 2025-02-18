@@ -1,38 +1,15 @@
-document.getElementById("fetch-create").addEventListener("click", nameA);
+document.getElementById("form").addEventListener("submit", createPost);
 // document.getElementById("fetch-list").addEventListener("click", fetchData);
+const img = document.getElementById('input-img');
+const title = document.getElementById('input-title');
+const bio = document.getElementById('input-bio');
 
 const container = document.getElementById("data-container");
 
-let form = document.getElementById('form');
-
-function nameA() {
-  event.preventDefault();
-  
-const img = document.getElementById('input-img').value;
-const title = document.getElementById('input-title').value;
-const bio = document.getElementById('input-bio').value;
-
-  console.log(img);
-  console.log(title);
-  console.log(bio);
-}
-
-
-let newPost = {
-  image: '',
-  title: '',
-  bio: '',
-  };
-
-    // async function getUsers() {
-    //   const response = await fetch('http://localhost:3004/posts');
-    //   const data = await response.json();
-    //   container.appendChild (JSON.stringify(data.users, null, 2));
-    // }
-
-    // GET request
+    //GET
     async function fetchGET() {
-      renderLoadingState();
+      renderLoadingState(); 
+      
       try {
         const response = await fetch("http://localhost:3004/posts");
         if (!response.ok) {
@@ -46,19 +23,32 @@ let newPost = {
       }
     }
 
-    // POST request
-    async function createPost() {
-      const response = await fetch('http://localhost:3004/posts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          firstName: 'John',
-          lastName: 'Doe',
-          age: 25
-        })
-      });
-      const data = await response.json();
-      output.textContent = JSON.stringify(data, null, 2);
+    //POST
+    const fetchUrl = 'http://localhost:3004/posts'
+    async function createPost(e) {
+      e.preventDefault(); 
+      try {
+
+        const postRequest = {
+          method: "POST", 
+          headers: { "Content-Type": "application/json" }, 
+          body: JSON.stringify({
+            imgDB: img.value,
+            titleDB: title.value,
+            bioDB: bio.value,
+          }),
+        };
+    
+        const response = await fetch(fetchUrl, postRequest);
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+  
+        console.log("Post creado:");
+      } catch (error) {
+        console.error("Hubo un problema con el POST:", error);
+      }
     }
 
     function renderPost() {
