@@ -1,5 +1,4 @@
-// document.getElementById("form").addEventListener("submit", createPost);
-document.getElementById("form").onsubmit = createPost;
+document.getElementById("form").addEventListener("submit", createPost);
 document.getElementById("fetch-list").addEventListener("click", fetchGET);
 
 const img = document.getElementById("input-img");
@@ -38,7 +37,13 @@ async function fetchGET() {
 //POST
 const fetchUrl = "http://localhost:3004/posts";
 async function createPost(e) {
-  e.preventDefault();
+  e.preventDefault(); // Evita el comportamiento por defecto del formulario
+  
+
+  if (!img.value || !title.value || !bio.value) {
+    throw new Error('Todos los campos son obligatorios.');
+  }
+
   try {
     const postRequest = {
       method: "POST",
@@ -51,13 +56,16 @@ async function createPost(e) {
     };
 
     const response = await fetch(fetchUrl, postRequest);
-    const responseData = await response.json(); // <-- Captura la respuesta
+    const responseData = await response.json(); 
 
-    console.log("📨 Respuesta del servidor:", responseData); // <-- Ver qué devuelve
+    console.log("📨 Respuesta del servidor:", responseData);
+
+    e.target.reset(); // Resetea el formulario después de enviarlo
   } catch (error) {
     console.error("Hubo un problema con el POST:", error);
   }
 }
+
 
 
 // DELETE
