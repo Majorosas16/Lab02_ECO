@@ -51,28 +51,69 @@ const container = document.getElementById("data-container");
       }
     }
 
-    function renderPost() {
+    // DELETE
 
-
-      // const container = document.getElementById("anime-container");
-      // container.innerHTML = "";
-  
-      // animeData.data.forEach((anime) => {
-      //   const card = document.createElement("div");
-      //   card.className = "card";
-      //   card.innerHTML = `
-      //     <img src="${anime.images.jpg.image_url}" alt="${anime.title}">
-      //     <h2>${anime.title}</h2>
-      //     <p><b>Year:</b> ${anime.year}</p>
-      //     <p><b>Type:</b> ${anime.type}</p>
-      //     <p><b><Status:/b> ${anime.status}</p>
-      //     <p><b>Episodes:</b> ${anime.episodes}</p>
-      //     <p><b>Duration:</b> ${anime.duration}</p>
-      //     <p><b>Rating:</b> ${anime.rating}</p>
-      //   `;
-      //   container.appendChild(card);
-      // });
+document.getElementById("post-render").addEventListener("click", async (e) => {
+  if (e.target.classList.contains("deleteBtn")) {
+    const postId = e.target.id;
+    if (postId) {
+      await fetchDeletePost(postId);
+      alert('Post eliminado con éxito');
+      fetchGET(); //Actualizar la BD
+    } else {
+      console.error("ID del post no encontrado");
+    }
   }
+});
+
+async function fetchDeletePost(id) {
+  // const fetchDeleteUrl = `http://localhost:3004/posts/${id}`
+  try {
+    const deletePost = { 
+      method: 'DELETE',
+      headers: { 
+        'Content-Type': 'application/json' ,
+      },
+    }
+    const response = await fetch(`http://localhost:3004/posts/${id}`, deletePost);
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+  } catch (error) {
+    console.error('Error al eliminar el post:', error.message);
+    alert(error.message)
+  }
+}
+
+//RENDER
+const renderPost = (post) => {
+  const containerPostsRender = document.getElementById("post-render");
+  containerPostsRender.innerHTML = "";
+
+  post.forEach((element) => {
+      const cardPost = document.createElement("div");
+      cardPost.innerHTML = `
+      <img src="${element.img}" alt="${element.title}">
+      <div>
+        <h3>${element.title}</h3>
+        <p>${element.bio}</p>
+      </div>
+      <button class="deleteBtn" id="${element.id}">Delete</button>
+      `;
+      containerPostsRender.appendChild(cardPost);
+  });
+}
+
+const goToCreatePostBtn = document.getElementById("go-create-post").addEventListener("click", () => {
+  const container = document.querySelector(".create-post");
+  container.style.display = "block";
+
+  const allPostContainer = document.querySelector(".list-post");
+  allPostContainer.style.display = "none";
+});
+
 
     function renderLoadingState() {
       container.innerHTML = ""; 
