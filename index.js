@@ -10,10 +10,9 @@ dataContainer.style.display = "none";
 
 //GET
 async function fetchGET() {
-  renderLoadingState();
 
   try {
-    const response = await fetch(fetchUrl);
+    const response = await fetch("http://localhost:3004/posts");
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
@@ -21,27 +20,24 @@ async function fetchGET() {
     renderPost(data);
 
     const pPost = document.getElementById("pPost");
-    pPost.innerHTML= ""
-  
+    pPost.innerHTML = "";
+
     const allPostContainer = document.querySelector("#data-container");
     allPostContainer.style.display = "block";
-  
+
     const formCont = document.querySelector(".form");
     formCont.style.display = "none";
-    
   } catch (error) {
-    renderErrorState();
+    console.error("Ops! something happened:", error);
   }
 }
 
 //POST
-const fetchUrl = "http://localhost:3004/posts";
 async function createPost(e) {
   e.preventDefault(); // Evita el comportamiento por defecto del formulario
-  
 
   if (!img.value || !title.value || !bio.value) {
-    throw new Error('Todos los campos son obligatorios.');
+    throw new Error("Todos los campos son obligatorios.");
   }
 
   try {
@@ -55,36 +51,34 @@ async function createPost(e) {
       }),
     };
 
-    const response = await fetch(fetchUrl, postRequest);
-    const responseData = await response.json(); 
+    const response = await fetch("http://localhost:3004/posts", postRequest);
+    const responseData = await response.json();
 
-    console.log("📨 Respuesta del servidor:", responseData);
+    console.log("📨 Serve's answer:", responseData);
 
-    e.target.reset(); // Resetea el formulario después de enviarlo
+    e.target.reset(); //Reset
   } catch (error) {
-    console.error("Hubo un problema con el POST:", error);
+    console.error("Ops! something happened:", error);
   }
 }
 
-
-
-// DELETE
-
+// FIND THE BUTTON DELETE
 document.getElementById("post-render").addEventListener("click", async (e) => {
   if (e.target.classList.contains("deleteBtn")) {
     const postId = e.target.id;
     if (postId) {
       await fetchDeletePost(postId);
-      alert("Post eliminado con éxito");
-      fetchGET(); //Actualizar la BD
+      console.error("Post delete");
+      fetchGET(); //db refresh for DOOM
     } else {
-      console.error("ID del post no encontrado");
+      console.error("ID not found");
     }
   }
 });
 
+//DELETE METHOD
 async function fetchDeletePost(id) {
-  const fetchDeleteUrl = `http://localhost:3004/posts/${id}`
+  const fetchDeleteUrl = `http://localhost:3004/posts/${id}`;
   try {
     const deletePost = {
       method: "DELETE",
@@ -92,17 +86,13 @@ async function fetchDeletePost(id) {
         "Content-Type": "application/json",
       },
     };
-    const response = await fetch(
-      fetchDeleteUrl,
-      deletePost
-    );
+    const response = await fetch(fetchDeleteUrl, deletePost);
 
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
   } catch (error) {
-    console.error("Error al eliminar el post:", error.message);
-    alert(error.message);
+    console.error("Failed to delete the post:", error.message);
   }
 }
 
@@ -125,7 +115,8 @@ const renderPost = (post) => {
   });
 };
 
-const goToCreatePostBtn = document
+//BUTTON FROM POST-RENDER
+const createPostBtn = document
   .getElementById("fetch-create-container")
   .addEventListener("click", () => {
     const formContainer = document.querySelector("#form");
@@ -134,15 +125,3 @@ const goToCreatePostBtn = document
     const dataContainer = document.querySelector("#data-container");
     dataContainer.style.display = "none";
   });
-
-function renderLoadingState() {
-  const p = document.getElementById("pPost");
-  p.innerHTML = "";
-  p.innerHTML = "Loading...";
-}
-
-function renderErrorState() {
-  const p = document.getElementById("pPost");
-  p.innerHTML= ""
-  p.innerHTML = "Failed to load data";
-}

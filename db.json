@@ -1,28 +1,16 @@
 {
   "posts": [
     {
-      "id": "895e",
-      "imgDB": "https://images.unsplash.com/photo-1575936123452-b67c3203c357?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
-      "titleDB": "Gir",
-      "bioDB": "Took a photo"
+      "id": "277a",
+      "imgDB": "https://i.pinimg.com/564x/be/ff/85/beff856a018f3f482725ccf6a57cbfa5.jpg",
+      "titleDB": "peeta",
+      "bioDB": "sopeeta"
     },
     {
-      "id": "59f6",
-      "imgDB": "https://i0.wp.com/coplaco.com/wp-content/uploads/2019/04/MEMES.png?fit=1170%2C760&ssl=1",
-      "titleDB": "Pepo",
-      "bioDB": "Meme do sapo"
-    },
-    {
-      "id": "59f6",
-      "imgDB": "https://hips.hearstapps.com/hmg-prod/images/pedro-pacal-premios-oscar-2023-perilla-640ecaca73211.jpg?crop=0.6304517133956387xw:1xh;center,top&resize=980:*",
-      "titleDB": "Papi Pedro Pascal",
-      "bioDB": "mi padre"
-    },
-    {
-      "id": "59f6",
-      "imgDB": "https://hips.hearstapps.com/hmg-prod/images/screenshot-2025-02-03-at-12-43-54-am-67a057a4978c5.png?crop=0.7305555555555555xw:1xh;center,top&resize=1200:*",
-      "titleDB": "Beyonce",
-      "bioDB": "Gracias a Beyonce por este Lab"
+      "id": "5dfb",
+      "imgDB": "gtgte",
+      "titleDB": "gtege",
+      "bioDB": "gregre"
     }
   ]
 }
