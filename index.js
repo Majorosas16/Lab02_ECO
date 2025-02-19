@@ -1,64 +1,73 @@
-document.getElementById("form").addEventListener("submit", createPost);
-// document.getElementById("fetch-list").addEventListener("click", fetchData);
-const img = document.getElementById('input-img');
-const title = document.getElementById('input-title');
-const bio = document.getElementById('input-bio');
+// document.getElementById("form").addEventListener("submit", createPost);
+document.getElementById("form").onsubmit = createPost;
+document.getElementById("fetch-list").addEventListener("click", fetchGET);
 
-const container = document.getElementById("data-container");
+const img = document.getElementById("input-img");
+const title = document.getElementById("input-title");
+const bio = document.getElementById("input-bio");
 
-    //GET
-    async function fetchGET() {
-      renderLoadingState(); 
-      
-      try {
-        const response = await fetch("http://localhost:3004/posts");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-      const data = await response.json();
-      renderPost(data);
-        
-      } catch (error) {
-        renderErrorState();
-      }
+const dataContainer = document.getElementById("data-container");
+dataContainer.style.display = "none";
+
+//GET
+async function fetchGET() {
+  renderLoadingState();
+
+  try {
+    const response = await fetch(fetchUrl);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
     }
+    const data = await response.json();
+    renderPost(data);
 
-    //POST
-    const fetchUrl = 'http://localhost:3004/posts'
-    async function createPost(e) {
-      e.preventDefault(); 
-      try {
-
-        const postRequest = {
-          method: "POST", 
-          headers: { "Content-Type": "application/json" }, 
-          body: JSON.stringify({
-            imgDB: img.value,
-            titleDB: title.value,
-            bioDB: bio.value,
-          }),
-        };
-    
-        const response = await fetch(fetchUrl, postRequest);
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
+    const pPost = document.getElementById("pPost");
+    pPost.innerHTML= ""
   
-        console.log("Post creado:");
-      } catch (error) {
-        console.error("Hubo un problema con el POST:", error);
-      }
-    }
+    const allPostContainer = document.querySelector("#data-container");
+    allPostContainer.style.display = "block";
+  
+    const formCont = document.querySelector(".form");
+    formCont.style.display = "none";
+    
+  } catch (error) {
+    renderErrorState();
+  }
+}
 
-    // DELETE
+//POST
+const fetchUrl = "http://localhost:3004/posts";
+async function createPost(e) {
+  e.preventDefault();
+  try {
+    const postRequest = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        imgDB: img.value,
+        titleDB: title.value,
+        bioDB: bio.value,
+      }),
+    };
+
+    const response = await fetch(fetchUrl, postRequest);
+    const responseData = await response.json(); // <-- Captura la respuesta
+
+    console.log("📨 Respuesta del servidor:", responseData); // <-- Ver qué devuelve
+  } catch (error) {
+    console.error("Hubo un problema con el POST:", error);
+  }
+}
+
+
+// DELETE
 
 document.getElementById("post-render").addEventListener("click", async (e) => {
   if (e.target.classList.contains("deleteBtn")) {
     const postId = e.target.id;
     if (postId) {
       await fetchDeletePost(postId);
-      alert('Post eliminado con éxito');
+      alert("Post eliminado con éxito");
       fetchGET(); //Actualizar la BD
     } else {
       console.error("ID del post no encontrado");
@@ -67,23 +76,25 @@ document.getElementById("post-render").addEventListener("click", async (e) => {
 });
 
 async function fetchDeletePost(id) {
-  // const fetchDeleteUrl = `http://localhost:3004/posts/${id}`
+  const fetchDeleteUrl = `http://localhost:3004/posts/${id}`
   try {
-    const deletePost = { 
-      method: 'DELETE',
-      headers: { 
-        'Content-Type': 'application/json' ,
+    const deletePost = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
       },
-    }
-    const response = await fetch(`http://localhost:3004/posts/${id}`, deletePost);
+    };
+    const response = await fetch(
+      fetchDeleteUrl,
+      deletePost
+    );
 
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
-
   } catch (error) {
-    console.error('Error al eliminar el post:', error.message);
-    alert(error.message)
+    console.error("Error al eliminar el post:", error.message);
+    alert(error.message);
   }
 }
 
@@ -93,35 +104,37 @@ const renderPost = (post) => {
   containerPostsRender.innerHTML = "";
 
   post.forEach((element) => {
-      const cardPost = document.createElement("div");
-      cardPost.innerHTML = `
-      <img src="${element.img}" alt="${element.title}">
+    const cardPost = document.createElement("div");
+    cardPost.innerHTML = `
+      <img src="${element.imgDB}" alt="${element.titleDB}">
       <div>
-        <h3>${element.title}</h3>
-        <p>${element.bio}</p>
+        <h3>${element.titleDB}</h3>
+        <p>${element.bioDB}</p>
       </div>
       <button class="deleteBtn" id="${element.id}">Delete</button>
       `;
-      containerPostsRender.appendChild(cardPost);
+    containerPostsRender.appendChild(cardPost);
   });
+};
+
+const goToCreatePostBtn = document
+  .getElementById("fetch-create-container")
+  .addEventListener("click", () => {
+    const formContainer = document.querySelector("#form");
+    formContainer.style.display = "block";
+
+    const dataContainer = document.querySelector("#data-container");
+    dataContainer.style.display = "none";
+  });
+
+function renderLoadingState() {
+  const p = document.getElementById("pPost");
+  p.innerHTML = "";
+  p.innerHTML = "Loading...";
 }
 
-const goToCreatePostBtn = document.getElementById("go-create-post").addEventListener("click", () => {
-  const container = document.querySelector(".create-post");
-  container.style.display = "block";
-
-  const allPostContainer = document.querySelector(".list-post");
-  allPostContainer.style.display = "none";
-});
-
-
-    function renderLoadingState() {
-      container.innerHTML = ""; 
-      container.innerHTML = "<p>Loading...</p>";
-  }
-
-  function renderErrorState() {
-    const container = document.getElementById("anime-container");
-    container.innerHTML = "";
-    container.innerHTML = "<p>Ops!, something happened</p>";
+function renderErrorState() {
+  const p = document.getElementById("pPost");
+  p.innerHTML= ""
+  p.innerHTML = "Failed to load data";
 }
